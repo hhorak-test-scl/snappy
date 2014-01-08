@@ -3,7 +3,7 @@
 
 Name:           %{?scl_prefix}snappy
 Version:        1.1.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Fast compression and decompression library
 
 Group:          System Environment/Libraries
@@ -26,12 +26,12 @@ inputs, but the resulting compressed files are anywhere from 20% to 100%
 bigger. 
 
 
-%package        devel
+%package        %{?scl_prefix}%{pkg_name}-devel
 Summary:        Development files for %{name}
 Group:          Development/Libraries
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
-%description    devel
+%description    %{?scl_prefix}%{pkg_name}-devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
@@ -41,7 +41,7 @@ developing applications that use %{name}.
 
 
 %build
-%configure CXXFLAGS="%{optflags} -DNDEBUG" --disable-static
+%configure CXXFLAGS="%{optflags} -DNDEBUG" LDFLAGS='-version-info %{?scl}' --disable-static
 make %{?_smp_mflags}
 
 
@@ -66,16 +66,19 @@ make check
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS ChangeLog COPYING NEWS README
-%{_libdir}/libsnappy.so.*
+%{_libdir}/libsnappy.%{?scl_prefix}.so.*
 
-%files devel
+%files %{?scl_prefix}%{pkg_name}-devel
 %defattr(-,root,root,-)
 %doc format_description.txt framing_format.txt
 %{_includedir}/snappy*.h
-%{_libdir}/libsnappy.so
+%{_libdir}/libsnappy.%{?scl_prefix}.so
 
 
 %changelog
+* Wed Jan 08 2014 Jan Pacner <jpacner@redhat.com> - 1.1.0-3
+- Resolves: RHBZ#1049403 (non-prefixed .so lib)
+
 * Sun May 05 2013 Honza Horak <hhorak@redhat.com> - 1.1.0-2
 - Add support for software collections
 
