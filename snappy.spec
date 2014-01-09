@@ -3,7 +3,7 @@
 
 Name:           %{?scl_prefix}snappy
 Version:        1.1.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Fast compression and decompression library
 
 Group:          System Environment/Libraries
@@ -41,7 +41,8 @@ developing applications that use %{name}.
 
 
 %build
-%configure CXXFLAGS="%{optflags} -DNDEBUG" LDFLAGS='-version-info %{?scl}' --disable-static
+LDFLAGS="$LDFLAGS -version-info %{?scl}"
+%configure CXXFLAGS="%{optflags} -DNDEBUG" --disable-static
 make %{?_smp_mflags}
 
 
@@ -66,16 +67,19 @@ make check
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS ChangeLog COPYING NEWS README
-%{_libdir}/libsnappy.%{?scl_prefix}.so.*
+%{_libdir}/libsnappy.%{?scl}.so.*
 
 %files %{?scl_prefix}%{pkg_name}-devel
 %defattr(-,root,root,-)
 %doc format_description.txt framing_format.txt
 %{_includedir}/snappy*.h
-%{_libdir}/libsnappy.%{?scl_prefix}.so
+%{_libdir}/libsnappy.%{?scl}.so
 
 
 %changelog
+* Thu Jan 09 2014 Jan Pacner <jpacner@redhat.com> - 1.1.0-4
+- Related: RHBZ#1049403 (non-prefixed .so lib) - fix typo
+
 * Wed Jan 08 2014 Jan Pacner <jpacner@redhat.com> - 1.1.0-3
 - Resolves: RHBZ#1049403 (non-prefixed .so lib)
 
