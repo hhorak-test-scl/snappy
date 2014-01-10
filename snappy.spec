@@ -38,8 +38,8 @@ developing applications that use %{name}.
 
 %prep
 %setup -q -n %{pkg_name}-%{version}
-# -version-info $(SNAPPY_LTVERSION) -> -release scl_name-snappy_version
-sed -i -r 's|(libsnappy_la_LDFLAGS *=).*|\1 %{?scl}|' 'Makefile.am'
+# -version-info $(SNAPPY_LTVERSION) -> -release scl_name
+sed -i -r 's|(libsnappy_la_LDFLAGS *=).*|\1 -release %{?scl}|' Makefile.am
 
 
 %build
