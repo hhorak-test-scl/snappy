@@ -65,16 +65,16 @@ make check
 %postun -p /sbin/ldconfig
 
 
-%files
-%defattr(-,root,root,-)
-%doc AUTHORS ChangeLog COPYING NEWS README
-%{_libdir}/libsnappy*.so*
-
 %files %{?scl_prefix}%{pkg_name}-devel
 %defattr(-,root,root,-)
 %doc format_description.txt framing_format.txt
 %{_includedir}/snappy*.h
 %{_libdir}/libsnappy.%{?scl}.so
+
+%files
+%defattr(-,root,root,-)
+%doc AUTHORS ChangeLog COPYING NEWS README
+%{_libdir}/libsnappy*.so*
 
 
 %changelog
