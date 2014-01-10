@@ -38,9 +38,8 @@ developing applications that use %{name}.
 
 %prep
 %setup -q -n %{pkg_name}-%{version}
-# libtool: libfoo_la_LDFLAGS = -release-info|-version-info|-release
 # -version-info $(SNAPPY_LTVERSION) -> -release scl_name-snappy_version
-sed -i -r 's|(libsnappy_la_LDFLAGS *=).*|\1 %{scl}|' 'Makefile.am'
+sed -i -r 's|(libsnappy_la_LDFLAGS *=).*|\1 %{?scl}|' 'Makefile.am'
 
 
 %build
@@ -69,7 +68,7 @@ make check
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS ChangeLog COPYING NEWS README
-%{_libdir}/libsnappy.%{?scl}.so.*
+%{_libdir}/libsnappy*.so*
 
 %files %{?scl_prefix}%{pkg_name}-devel
 %defattr(-,root,root,-)
