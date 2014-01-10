@@ -3,7 +3,7 @@
 
 Name:           %{?scl_prefix}snappy
 Version:        1.1.0
-Release:        4%{?dist}
+Release:        3%{?dist}
 Summary:        Fast compression and decompression library
 
 Group:          System Environment/Libraries
@@ -38,10 +38,12 @@ developing applications that use %{name}.
 
 %prep
 %setup -q -n %{pkg_name}-%{version}
+# libtool: libfoo_la_LDFLAGS = -release-info|-version-info|-release
+# -version-info $(SNAPPY_LTVERSION) -> -release scl_name-snappy_version
+sed -i -r 's|(libsnappy_la_LDFLAGS *=).*|\1 %{scl}|' 'Makefile.am'
 
 
 %build
-LDFLAGS="$LDFLAGS -version-info %{?scl}"
 %configure CXXFLAGS="%{optflags} -DNDEBUG" --disable-static
 make %{?_smp_mflags}
 
@@ -77,9 +79,6 @@ make check
 
 
 %changelog
-* Thu Jan 09 2014 Jan Pacner <jpacner@redhat.com> - 1.1.0-4
-- Related: RHBZ#1049403 (non-prefixed .so lib) - fix typo
-
 * Wed Jan 08 2014 Jan Pacner <jpacner@redhat.com> - 1.1.0-3
 - Resolves: RHBZ#1049403 (non-prefixed .so lib)
 
