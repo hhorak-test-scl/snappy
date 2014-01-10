@@ -38,8 +38,11 @@ developing applications that use %{name}.
 
 %prep
 %setup -q -n %{pkg_name}-%{version}
-# -version-info $(SNAPPY_LTVERSION) -> -release scl_name
-sed -i -r 's|(libsnappy_la_LDFLAGS *=).*|\1 -release %{?scl}|' Makefile.am
+# mongodb24 -> 24
+_ver="$(printf '%%s' '%{?scl_prefix}' | sed -r 's|[^0-9]+||g')"
+# $(SNAPPY_LTVERSION) -> 240$(SNAPPY_LTVERSION); use 0 as separator
+sed -i -r 's|(-version-info[[:space:]]+)(\$\(SNAPPY_LTVERSION\))|\1'"$_ver"'0\2|' \
+  Makefile.in
 
 
 %build
@@ -65,16 +68,16 @@ make check
 %postun -p /sbin/ldconfig
 
 
+%files
+%defattr(-,root,root,-)
+%doc AUTHORS ChangeLog COPYING NEWS README
+%{_libdir}/libsnappy.so.*
+
 %files %{?scl_prefix}%{pkg_name}-devel
 %defattr(-,root,root,-)
 %doc format_description.txt framing_format.txt
 %{_includedir}/snappy*.h
-%{_libdir}/libsnappy.%{?scl}.so
-
-%files
-%defattr(-,root,root,-)
-%doc AUTHORS ChangeLog COPYING NEWS README
-%{_libdir}/libsnappy*.so*
+%{_libdir}/libsnappy.so
 
 
 %changelog
